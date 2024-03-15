@@ -1,7 +1,4 @@
-#!/usr/bin/python3
-def magic_calculation(a, b, c):
-    if a < b:
-        return c
-    elif c > b:
-        return a + b
-    return a * b - c
+def magic_calculation(a, b):
+    result = 98                # LOAD_CONST 1 (98)
+    result += (a ** b)        # LOAD_FAST a, LOAD_FAST b, BINARY_POWER, BINARY_ADD
+    return result              # RETURN_VALUE
