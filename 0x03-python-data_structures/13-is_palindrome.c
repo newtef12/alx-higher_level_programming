@@ -1,18 +1,42 @@
 #include "lists.h"
-#include <stdlib.h>
+#include <stdio.h>
 
 /**
- * is_palindrome - checks if a singly linked list is a palindrome
- * @head: pointer to pointer to the head of the list
- * Return: 1 if palindrome, 0 otherwise
+ * reverse_list - Reverses a linked list.
+ * @head: Pointer to pointer to the head of the list.
+ */
+void reverse_list(listint_t **head)
+{
+    listint_t *prev = NULL;
+    listint_t *current = *head;
+    listint_t *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    *head = prev;
+}
+
+/**
+ * is_palindrome - Checks if a singly linked list is a palindrome.
+ * @head: Pointer to pointer to the head of the list.
+ *
+ * Return: 1 if palindrome, 0 otherwise.
  */
 int is_palindrome(listint_t **head)
 {
     if (*head == NULL || (*head)->next == NULL)
         return (1);
 
-    listint_t *slow = *head, *fast = *head;
-    listint_t *prev_slow = NULL, *second_half = NULL;
+    listint_t *slow = *head;
+    listint_t *fast = *head;
+    listint_t *prev_slow = NULL;
+    listint_t *second_half = NULL;
     listint_t *mid_node = NULL;
     int is_palindrome = 1;
 
@@ -37,7 +61,16 @@ int is_palindrome(listint_t **head)
     reverse_list(&second_half);
 
     // Compare the first and second halves of the list
-    is_palindrome = compare_lists(*head, second_half);
+    while (*head != NULL && second_half != NULL)
+    {
+        if ((*head)->n != second_half->n)
+        {
+            is_palindrome = 0;
+            break;
+        }
+        *head = (*head)->next;
+        second_half = second_half->next;
+    }
 
     // Restore the original list by reversing the second half back and joining it
     // with the first half
@@ -52,43 +85,4 @@ int is_palindrome(listint_t **head)
     }
 
     return is_palindrome;
-}
-
-/**
- * reverse_list - reverses a linked list
- * @head_ref: pointer to pointer to the head of the list
- */
-void reverse_list(listint_t **head_ref)
-{
-    listint_t *prev = NULL, *current = *head_ref, *next = NULL;
-
-    while (current != NULL)
-    {
-        next = current->next;
-        current->next = prev;
-        prev = current;
-        current = next;
-    }
-
-    *head_ref = prev;
-}
-
-/**
- * compare_lists - compares two linked lists
- * @head1: pointer to the head of the first list
- * @head2: pointer to the head of the second list
- * Return: 1 if lists are equal, 0 otherwise
- */
-int compare_lists(listint_t *head1, listint_t *head2)
-{
-    while (head1 != NULL && head2 != NULL)
-    {
-        if (head1->n != head2->n)
-            return 0;
-        head1 = head1->next;
-        head2 = head2->next;
-    }
-
-    // If both lists are NULL at this point, they are equal
-    return (head1 == NULL && head2 == NULL);
 }
