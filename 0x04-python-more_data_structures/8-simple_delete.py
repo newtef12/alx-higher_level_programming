@@ -13,7 +13,7 @@ def simple_delete(a_dictionary, key=""):
 
 if __name__ == "__main__":
     a_dictionary = {'language': "C", 'Number': 89, 'track': "Low", 'ids': [1, 2, 3]}
-    new_dict = simple_delete(a_dictionary, 'track')
+    new_dict = simple_delete(a_dictionary.copy(), 'track')
     for key, value in a_dictionary.items():
         print("{}: {}".format(key, value))
     print("--")
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         print("{}: {}".format(key, value))
     print("--")
     print("--")
-    new_dict = simple_delete(a_dictionary, 'c_is_fun')
+    new_dict = simple_delete(a_dictionary.copy(), 'c_is_fun')
     for key, value in a_dictionary.items():
         print("{}: {}".format(key, value))
     print("--")
