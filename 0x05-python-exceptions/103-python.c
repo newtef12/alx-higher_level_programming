@@ -18,19 +18,12 @@ void print_python_list(PyObject *p)
     Py_ssize_t size, i;
     const char *type;
     PyListObject *list = (PyListObject *)p;
-    PyVarObject *var = (PyVarObject *)p;
 
-    size = var->ob_size;
+    size = PyList_Size(p);
 
     printf("[*] Python list info\n");
-    if (!PyList_Check(p))
-    {
-        printf("  [ERROR] Invalid List Object\n");
-        return;
-    }
-
     printf("[*] Size of the Python List = %ld\n", size);
-    printf("[*] Allocated = %ld\n", var->ob_base.ob_size);
+    printf("[*] Allocated = %ld\n", list->allocated);
 
     for (i = 0; i < size; i++)
     {
@@ -50,7 +43,7 @@ void print_python_list(PyObject *p)
 void print_python_bytes(PyObject *p)
 {
     Py_ssize_t size, i;
-    unsigned char *buffer;
+    char *buffer;
 
     printf("[.] bytes object info\n");
 
@@ -61,14 +54,14 @@ void print_python_bytes(PyObject *p)
     }
 
     size = PyBytes_Size(p);
-    buffer = (unsigned char *)PyBytes_AsString(p);
+    buffer = PyBytes_AsString(p);
 
     printf("  size: %ld\n", size);
-    printf("  trying string: %s\n", (size > 10) ? (char *)buffer : PyBytes_AsString(p));
+    printf("  trying string: %s\n", buffer);
 
-    printf("  first %ld bytes: ", (size < 10) ? size + 1 : 10);
+    printf("  first %ld bytes: ", (size < 10) ? size : 10);
     for (i = 0; i < size && i < 10; i++)
-        printf("%02x%c", buffer[i], (i == size - 1 || i == 9) ? '\n' : ' ');
+        printf("%02x%c", (unsigned char)buffer[i], (i == size - 1 || i == 9) ? '\n' : ' ');
 }
 
 /**
@@ -85,5 +78,5 @@ void print_python_float(PyObject *p)
         return;
     }
 
-    printf("  value: %f\n", ((PyFloatObject *)p)->ob_fval);
+    printf("  value: %f\n", PyFloat_AsDouble(p));
 }
